@@ -1,4 +1,8 @@
+"use client"
+
+import { useState, useEffect } from "react"
 import { FaQuoteLeft, FaStar } from "react-icons/fa";
+import { motion } from "framer-motion"
 
 const testimonials = [
   {
@@ -27,24 +31,43 @@ const testimonials = [
   }
 ];
 
+const fadeTop = {
+  hidden: { opacity: 0, y: -40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const fadeBottom = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
 export function Testimonials() {
+  const [stars, setStars] = useState<{ style: React.CSSProperties }[]>([]);
+
+  useEffect(() => {
+    const items = [...Array(80)].map(() => ({
+      style: {
+        width: Math.random() * 2 + 1 + "px",
+        height: Math.random() * 2 + 1 + "px",
+        top: Math.random() * 100 + "%",
+        left: Math.random() * 100 + "%",
+        animationDelay: Math.random() * 3 + "s",
+        animationDuration: Math.random() * 2 + 2 + "s",
+        opacity: Math.random() * 0.5 + 0.3
+      }
+    }));
+    setStars(items);
+  }, []);
+
   return (
     <section className="relative py-24 bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-950 overflow-hidden">
       {/* Animated stars background */}
       <div className="absolute inset-0">
-        {[...Array(80)].map((_, i) => (
+        {stars.map((star, i) => (
           <div
             key={i}
             className="absolute bg-white rounded-full animate-pulse"
-            style={{
-              width: Math.random() * 2 + 1 + 'px',
-              height: Math.random() * 2 + 1 + 'px',
-              top: Math.random() * 100 + '%',
-              left: Math.random() * 100 + '%',
-              animationDelay: Math.random() * 3 + 's',
-              animationDuration: Math.random() * 2 + 2 + 's',
-              opacity: Math.random() * 0.5 + 0.3
-            }}
+            style={star.style}
           />
         ))}
       </div>
@@ -64,16 +87,34 @@ export function Testimonials() {
               <div className="w-8 h-0.5 bg-gradient-to-l from-transparent to-blue-400" />
             </div>
           </div>
-          <h2 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+          <motion.h2
+            className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent"
+            variants={fadeTop}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
             Client Testimonials
-          </h2>
-          <p className="text-blue-200/70 text-lg max-w-2xl mx-auto">
+          </motion.h2>
+          <motion.p
+            className="text-blue-200/70 text-lg max-w-2xl mx-auto"
+            variants={fadeTop}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+          >
             Voices from across the digital cosmos
-          </p>
+          </motion.p>
         </div>
 
         {/* Testimonials Grid */}
-        <div className="grid sm:grid-cols-2 gap-8">
+        <motion.div
+          className="grid sm:grid-cols-2 gap-8"
+          variants={fadeBottom}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           {testimonials.map((testimonial, index) => (
             <div
               key={index}
@@ -84,7 +125,7 @@ export function Testimonials() {
             >
               {/* Glow effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-pink-500/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-all duration-500" />
-              
+
               {/* Card */}
               <div className="relative bg-slate-900/60 backdrop-blur-md border border-slate-700/50 rounded-3xl p-8 transition-all duration-500 hover:scale-105 hover:border-blue-400/50 hover:shadow-2xl hover:shadow-blue-500/20">
                 {/* Quote icon with orbit */}
@@ -104,8 +145,8 @@ export function Testimonials() {
                 {/* Rating stars */}
                 <div className="flex gap-1 mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <FaStar 
-                      key={i} 
+                    <FaStar
+                      key={i}
                       className="text-yellow-400 text-sm group-hover:scale-110 transition-transform duration-300"
                       style={{ transitionDelay: `${i * 0.05}s` }}
                     />
@@ -131,7 +172,7 @@ export function Testimonials() {
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Bottom decoration */}
         <div className="flex justify-center mt-16">

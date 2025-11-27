@@ -1,5 +1,9 @@
+"use client"
+
+import { useEffect, useState } from "react";
 import { FaJs, FaReact, FaNodeJs } from "react-icons/fa";
 import { SiTypescript, SiNextdotjs, SiTailwindcss } from "react-icons/si";
+import { motion } from "framer-motion"
 
 export const skills = [
   {
@@ -46,22 +50,56 @@ export const skills = [
   },
 ];
 
+const fadeTop = {
+  hidden: { opacity: 0, y: -40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const fadeBottom = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
 export function Skills() {
+  const [stars, setStars] = useState<Array<{
+    id: number;
+    width: string;
+    height: string;
+    top: string;
+    left: string;
+    delay: string;
+    duration: string;
+  }>>([]);
+
+  useEffect(() => {
+    const generated = Array.from({ length: 50 }).map((_, i) => ({
+      id: i,
+      width: Math.random() * 3 + 1 + 'px',
+      height: Math.random() * 3 + 1 + 'px',
+      top: Math.random() * 100 + '%',
+      left: Math.random() * 100 + '%',
+      delay: Math.random() * 3 + 's',
+      duration: Math.random() * 3 + 2 + 's',
+    }));
+
+    setStars(generated);
+  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center p-8 relative overflow-hidden">
       {/* Stars background */}
       <div className="absolute inset-0">
-        {[...Array(50)].map((_, i) => (
+        {stars.map(star => (
           <div
-            key={i}
+            key={star.id}
             className="absolute bg-white rounded-full animate-pulse"
             style={{
-              width: Math.random() * 3 + 1 + 'px',
-              height: Math.random() * 3 + 1 + 'px',
-              top: Math.random() * 100 + '%',
-              left: Math.random() * 100 + '%',
-              animationDelay: Math.random() * 3 + 's',
-              animationDuration: Math.random() * 3 + 2 + 's'
+              width: star.width,
+              height: star.height,
+              top: star.top,
+              left: star.left,
+              animationDelay: star.delay,
+              animationDuration: star.duration,
             }}
           />
         ))}
@@ -72,14 +110,26 @@ export function Skills() {
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
 
       <div className="relative z-10 max-w-6xl w-full">
-        <div className="text-center mb-16">
+        <motion.div
+          className="text-center mb-16"
+          variants={fadeTop}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           <h2 className="text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
             Skills
           </h2>
           <p className="text-purple-300/80 text-lg">Exploring the tech universe</p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={fadeBottom}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+        >
           {skills.map((skill, index) => (
             <div
               key={skill.name}
@@ -116,7 +166,7 @@ export function Skills() {
               </div>
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

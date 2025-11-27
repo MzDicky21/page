@@ -1,12 +1,47 @@
+"use client"
+
 import { projects } from "@/lib/data"
+import { motion } from "framer-motion"
+
+const fadeLeft = {
+  hidden: { opacity: 0, x: -40 },
+  show: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+};
+
+const fadeBottom = {
+  hidden: { opacity: 0, y: 40 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
 
 export function Projects() {
   return (
     <section id="projects" className="py-20 max-w-6xl mx-auto px-6">
-      <h2 className="text-4xl font-bold mb-4 text-gray-900">Featured Projects</h2>
-      <p className="text-gray-600 mb-16 text-lg">Explore my latest work and creative solutions</p>
+      <motion.h2
+        className="text-4xl font-bold mb-4 text-gray-900"
+        variants={fadeLeft}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+        Featured Projects
+      </motion.h2>
+      <motion.p
+        className="text-gray-600 mb-16 text-lg"
+        variants={fadeLeft}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
+        Explore my latest work and creative solutions
+      </motion.p>
 
-      <div className="space-y-16">
+      <motion.div
+        className="space-y-16"
+        variants={fadeBottom}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true }}
+      >
         {projects.map((project, index) => (
           <div
             key={project.title}
@@ -16,8 +51,8 @@ export function Projects() {
             {/* Image Section */}
             <div className="w-full md:w-1/2">
               <div className={`relative overflow-hidden rounded-2xl ${index === 2
-                  ? 'shadow-2xl shadow-indigo-500/30'
-                  : 'shadow-lg'
+                ? 'shadow-2xl shadow-indigo-500/30'
+                : 'shadow-lg'
                 } transition-all duration-500 group-hover:shadow-2xl ${index === 2
                   ? 'group-hover:shadow-indigo-500/40'
                   : 'group-hover:shadow-gray-400/50'
@@ -68,7 +103,7 @@ export function Projects() {
             </div>
           </div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
